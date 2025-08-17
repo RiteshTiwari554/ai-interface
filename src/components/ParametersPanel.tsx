@@ -52,25 +52,24 @@ export default function ParametersPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">
+      <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-600">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
           Model Parameters
         </h3>
         <button
           onClick={resetToDefaults}
-          className="text-sm text-blue-500 hover:text-blue-600 transition-colors"
+          className="px-4 py-2 text-sm bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-lg transition-colors font-medium"
         >
           Reset to Defaults
         </button>
       </div>
 
-      {/* Temperature */}
-      <div className="space-y-2">
+      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            Temperature: {parameters.temperature}
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Temperature: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.temperature}</span>
           </label>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
+          <span className="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full font-medium">
             {parameters.temperature < 0.3 ? 'Focused' : parameters.temperature < 0.7 ? 'Balanced' : 'Creative'}
           </span>
         </div>
@@ -81,21 +80,20 @@ export default function ParametersPanel() {
           step="0.1"
           value={parameters.temperature}
           onChange={(e) => handleParameterChange('temperature', parseFloat(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer slider"
+          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
         />
         <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span>0 (Focused)</span>
-          <span>2 (Creative)</span>
+          <span className="font-medium">0 (Focused)</span>
+          <span className="font-medium">2 (Creative)</span>
         </div>
       </div>
 
-      {/* Max Tokens */}
-      <div className="space-y-2">
+      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            Max Tokens: {parameters.maxTokens.toLocaleString()}
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Max Tokens: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.maxTokens.toLocaleString()}</span>
           </label>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
+          <span className="px-3 py-1 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full font-medium">
             {parameters.maxTokens < 1000 ? 'Short' : parameters.maxTokens < 4000 ? 'Medium' : 'Long'}
           </span>
         </div>
@@ -106,21 +104,20 @@ export default function ParametersPanel() {
           step="100"
           value={parameters.maxTokens}
           onChange={(e) => handleParameterChange('maxTokens', parseInt(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer slider"
+          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
         />
         <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span>100</span>
-          <span>{selectedModel?.maxTokens.toLocaleString() || '8,192'}</span>
+          <span className="font-medium">100</span>
+          <span className="font-medium">{selectedModel?.maxTokens.toLocaleString() || '8,192'}</span>
         </div>
       </div>
 
-      {/* Top P */}
-      <div className="space-y-2">
+      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            Top P: {parameters.topP}
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Top P: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.topP}</span>
           </label>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
+          <span className="px-3 py-1 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full font-medium">
             {parameters.topP < 0.5 ? 'Conservative' : parameters.topP < 0.9 ? 'Balanced' : 'Diverse'}
           </span>
         </div>
@@ -131,21 +128,20 @@ export default function ParametersPanel() {
           step="0.1"
           value={parameters.topP}
           onChange={(e) => handleParameterChange('topP', parseFloat(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer slider"
+          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
         />
         <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span>0.1</span>
-          <span>1.0</span>
+          <span className="font-medium">0.1</span>
+          <span className="font-medium">1.0</span>
         </div>
       </div>
 
-      {/* Frequency Penalty */}
-      <div className="space-y-2">
+      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            Frequency Penalty: {parameters.frequencyPenalty}
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Frequency Penalty: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.frequencyPenalty}</span>
           </label>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
+          <span className="px-3 py-1 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full font-medium">
             {parameters.frequencyPenalty < 0.1 ? 'None' : parameters.frequencyPenalty < 0.5 ? 'Low' : 'High'}
           </span>
         </div>
@@ -156,21 +152,20 @@ export default function ParametersPanel() {
           step="0.1"
           value={parameters.frequencyPenalty}
           onChange={(e) => handleParameterChange('frequencyPenalty', parseFloat(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer slider"
+          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
         />
         <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span>-2 (Encourage)</span>
-          <span>2 (Discourage)</span>
+          <span className="font-medium">-2 (Encourage)</span>
+          <span className="font-medium">2 (Discourage)</span>
         </div>
       </div>
 
-      {/* Presence Penalty */}
-      <div className="space-y-2">
+      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            Presence Penalty: {parameters.presencePenalty}
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Presence Penalty: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.presencePenalty}</span>
           </label>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
+          <span className="px-3 py-1 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full font-medium">
             {parameters.presencePenalty < 0.1 ? 'None' : parameters.presencePenalty < 0.5 ? 'Low' : 'High'}
           </span>
         </div>
@@ -181,25 +176,42 @@ export default function ParametersPanel() {
           step="0.1"
           value={parameters.presencePenalty}
           onChange={(e) => handleParameterChange('presencePenalty', parseFloat(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer slider"
+          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
         />
         <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span>-2 (Encourage)</span>
-          <span>2 (Discourage)</span>
+          <span className="font-medium">-2 (Encourage)</span>
+          <span className="font-medium">2 (Discourage)</span>
         </div>
       </div>
 
-      {/* Current Parameters Summary */}
-      <div className="p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
-        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+      <div className="p-5 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+        <h4 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-3 flex items-center">
+          <svg className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
           Current Settings
         </h4>
-        <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400">
-          <div>Temperature: {parameters.temperature}</div>
-          <div>Max Tokens: {parameters.maxTokens.toLocaleString()}</div>
-          <div>Top P: {parameters.topP}</div>
-          <div>Freq Penalty: {parameters.frequencyPenalty}</div>
-          <div>Presence Penalty: {parameters.presencePenalty}</div>
+        <div className="grid grid-cols-2 gap-3 text-xs text-blue-700 dark:text-blue-300">
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <span>Temperature: {parameters.temperature}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span>Max Tokens: {parameters.maxTokens.toLocaleString()}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+            <span>Top P: {parameters.topP}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+            <span>Freq Penalty: {parameters.frequencyPenalty}</span>
+          </div>
+          <div className="flex items-center space-x-2 col-span-2">
+            <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+            <span>Presence Penalty: {parameters.presencePenalty}</span>
+          </div>
         </div>
       </div>
     </div>

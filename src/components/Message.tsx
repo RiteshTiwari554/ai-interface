@@ -12,7 +12,6 @@ export default function Message({ message }: MessageProps) {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(message.content);
-      // You could add a toast notification here
     } catch (err) {
       console.error('Failed to copy text: ', err);
     }
@@ -32,27 +31,24 @@ export default function Message({ message }: MessageProps) {
   };
   
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
       <div className={`max-w-[80%] ${isUser ? 'order-2' : 'order-1'}`}>
         <div 
           className={`rounded-2xl px-4 py-3 relative group ${
             isUser 
-              ? 'bg-blue-500 text-white rounded-br-md' 
-              : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-bl-md'
+              ? 'message-user rounded-br-md' 
+              : 'message-assistant rounded-bl-md'
           }`}
           onMouseEnter={() => setShowActions(true)}
           onMouseLeave={() => setShowActions(false)}
         >
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
           
-          {/* Action Buttons */}
           {showActions && (
-            <div className={`absolute top-2 right-2 flex space-x-1 ${
-              isUser ? 'text-blue-100' : 'text-slate-500'
-            }`}>
+            <div className="message-actions absolute top-2 right-2 flex space-x-1 rounded">
               <button
                 onClick={handleCopy}
-                className="p-1 rounded hover:bg-white/20 transition-colors"
+                className="p-1 rounded transition-colors"
                 title="Copy message"
                 aria-label="Copy message"
               >
@@ -62,7 +58,7 @@ export default function Message({ message }: MessageProps) {
               </button>
               <button
                 onClick={handleDownloadJSON}
-                className="p-1 rounded hover:bg-white/20 transition-colors"
+                className="p-1 rounded transition-colors"
                 title="Download as JSON"
                 aria-label="Download as JSON"
               >
@@ -74,7 +70,6 @@ export default function Message({ message }: MessageProps) {
           )}
         </div>
         
-        {/* Message Metadata */}
         <div className={`text-xs text-slate-500 dark:text-slate-400 mt-2 ${
           isUser ? 'text-right' : 'text-left'
         }`}>
@@ -87,7 +82,6 @@ export default function Message({ message }: MessageProps) {
         </div>
       </div>
       
-      {/* Avatar */}
       <div className={`w-8 h-8 rounded-full flex items-center justify-center mx-2 ${
         isUser ? 'order-1 bg-blue-500' : 'order-2 bg-slate-500'
       }`}>

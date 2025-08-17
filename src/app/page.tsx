@@ -15,18 +15,18 @@ export default function Home() {
   return (
     <ThemeProvider>
       <SessionProvider>
-        <div className="min-h-screen bg-gradient-to-br transition-all duration-300">
+        <div className="min-h-screen bg-background transition-all duration-300">
           <Header />
           
           <main className="container mx-auto px-4 py-8 max-w-7xl">
             <div className="lg:hidden mb-6">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm transition-all duration-200"
+                className="w-full bg-black border border-border rounded-lg px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent shadow-sm transition-all duration-200 text-white"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-700 dark:text-slate-300 font-medium">Configuration Panel</span>
-                  <svg className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${sidebarOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="font-medium">Configuration Panel</span>
+                  <svg className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${sidebarOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
@@ -35,7 +35,7 @@ export default function Home() {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className={`lg:col-span-1 ${sidebarOpen ? 'block' : 'hidden lg:block'}`}>
-                <div className="configuration-panel rounded-xl shadow-xl overflow-hidden">
+                <div className="sticky top-24 h-[calc(100vh-8rem)] overflow-hidden flex flex-col bg-black rounded-xl shadow-xl border border-border">
                   <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4">
                     <h2 className="text-xl font-bold text-white">
                       Configuration
@@ -45,15 +45,15 @@ export default function Home() {
                     </p>
                   </div>
                   
-                  <div className="configuration-content custom-scrollbar">
+                  <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
                     <div className="space-y-8">
-                      <div className="component-spacing">
+                      <div className="mb-8 last:mb-0">
                         <ModelSelector />
                       </div>
-                      <div className="component-spacing">
+                      <div className="mb-8 last:mb-0">
                         <PromptEditor />
                       </div>
-                      <div className="component-spacing">
+                      <div className="mb-8 last:mb-0">
                         <ParametersPanel />
                       </div>
                     </div>

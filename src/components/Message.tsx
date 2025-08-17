@@ -36,8 +36,8 @@ export default function Message({ message }: MessageProps) {
         <div 
           className={`rounded-2xl px-4 py-3 relative group ${
             isUser 
-              ? 'message-user rounded-br-md' 
-              : 'message-assistant rounded-bl-md'
+              ? 'bg-blue-500 text-white rounded-br-md' 
+              : 'bg-gray-900 text-white rounded-bl-md border border-gray-600'
           }`}
           onMouseEnter={() => setShowActions(true)}
           onMouseLeave={() => setShowActions(false)}
@@ -45,10 +45,12 @@ export default function Message({ message }: MessageProps) {
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
           
           {showActions && (
-            <div className="message-actions absolute top-2 right-2 flex space-x-1 rounded">
+            <div className={`absolute top-2 right-2 flex space-x-1 rounded ${
+              isUser ? 'text-blue-100' : 'text-gray-400'
+            }`}>
               <button
                 onClick={handleCopy}
-                className="p-1 rounded transition-colors"
+                className="p-1 rounded hover:bg-white/10 transition-colors"
                 title="Copy message"
                 aria-label="Copy message"
               >
@@ -58,7 +60,7 @@ export default function Message({ message }: MessageProps) {
               </button>
               <button
                 onClick={handleDownloadJSON}
-                className="p-1 rounded transition-colors"
+                className="p-1 rounded hover:bg-white/10 transition-colors"
                 title="Download as JSON"
                 aria-label="Download as JSON"
               >
@@ -70,12 +72,12 @@ export default function Message({ message }: MessageProps) {
           )}
         </div>
         
-        <div className={`text-xs text-slate-500 dark:text-slate-400 mt-2 ${
+        <div className={`text-xs text-gray-400 mt-2 ${
           isUser ? 'text-right' : 'text-left'
         }`}>
           <div>{message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
           {message.model && (
-            <div className="text-xs text-slate-400 dark:text-slate-500">
+            <div className="text-xs text-gray-500">
               Model: {message.model}
             </div>
           )}
@@ -83,7 +85,7 @@ export default function Message({ message }: MessageProps) {
       </div>
       
       <div className={`w-8 h-8 rounded-full flex items-center justify-center mx-2 ${
-        isUser ? 'order-1 bg-blue-500' : 'order-2 bg-slate-500'
+        isUser ? 'order-1 bg-blue-500' : 'order-2 bg-gray-600'
       }`}>
         {isUser ? (
           <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

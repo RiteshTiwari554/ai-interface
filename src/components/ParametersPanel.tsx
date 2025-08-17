@@ -1,216 +1,209 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSession } from '@/contexts/SessionContext';
-
-interface Parameters {
-  temperature: number;
-  maxTokens: number;
-  topP: number;
-  frequencyPenalty: number;
-  presencePenalty: number;
-}
 
 export default function ParametersPanel() {
   const { selectedModel } = useSession();
-  const [parameters, setParameters] = useState<Parameters>({
+  const [parameters, setParameters] = useState({
     temperature: 0.7,
-    maxTokens: 2048,
-    topP: 1.0,
+    maxTokens: 1000,
+    topP: 0.9,
     frequencyPenalty: 0.0,
-    presencePenalty: 0.0
+    presencePenalty: 0.0,
   });
 
-  useEffect(() => {
-    if (selectedModel) {
-      setParameters(prev => ({
-        ...prev,
-        maxTokens: selectedModel.maxTokens,
-        temperature: selectedModel.temperature
-      }));
-    }
-  }, [selectedModel]);
-
-  const handleParameterChange = (key: keyof Parameters, value: number) => {
+  const handleParameterChange = (param: string, value: number) => {
     setParameters(prev => ({
       ...prev,
-      [key]: value
+      [param]: value
     }));
   };
 
   const resetToDefaults = () => {
-    if (selectedModel) {
-      setParameters({
-        temperature: selectedModel.temperature,
-        maxTokens: selectedModel.maxTokens,
-        topP: 1.0,
-        frequencyPenalty: 0.0,
-        presencePenalty: 0.0
-      });
-    }
+    setParameters({
+      temperature: 0.7,
+      maxTokens: 1000,
+      topP: 0.9,
+      frequencyPenalty: 0.0,
+      presencePenalty: 0.0,
+    });
   };
 
+  if (!selectedModel) {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="text-lg font-semibold text-white">Model Parameters</div>
+        <div className="text-sm text-gray-400 mb-6">
+          Select a model first to configure its parameters.
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-600">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-          Model Parameters
-        </h3>
-        <button
-          onClick={resetToDefaults}
-          className="px-4 py-2 text-sm bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-lg transition-colors font-medium"
-        >
-          Reset to Defaults
-        </button>
+    <div className="flex flex-col gap-4">
+      <div className="text-lg font-semibold text-white">Model Parameters</div>
+      <div className="text-sm text-gray-400 mb-6">
+        Fine-tune the AI model's behavior with these parameters.
       </div>
 
-      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-            Temperature: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.temperature}</span>
-          </label>
-          <span className="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full font-medium">
-            {parameters.temperature < 0.3 ? 'Focused' : parameters.temperature < 0.7 ? 'Balanced' : 'Creative'}
-          </span>
-        </div>
-        <input
-          type="range"
-          min="0"
-          max="2"
-          step="0.1"
-          value={parameters.temperature}
-          onChange={(e) => handleParameterChange('temperature', parseFloat(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
-        />
-        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span className="font-medium">0 (Focused)</span>
-          <span className="font-medium">2 (Creative)</span>
-        </div>
-      </div>
-
-      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-            Max Tokens: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.maxTokens.toLocaleString()}</span>
-          </label>
-          <span className="px-3 py-1 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full font-medium">
-            {parameters.maxTokens < 1000 ? 'Short' : parameters.maxTokens < 4000 ? 'Medium' : 'Long'}
-          </span>
-        </div>
-        <input
-          type="range"
-          min="100"
-          max={selectedModel?.maxTokens || 8192}
-          step="100"
-          value={parameters.maxTokens}
-          onChange={(e) => handleParameterChange('maxTokens', parseInt(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
-        />
-        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span className="font-medium">100</span>
-          <span className="font-medium">{selectedModel?.maxTokens.toLocaleString() || '8,192'}</span>
-        </div>
-      </div>
-
-      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-            Top P: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.topP}</span>
-          </label>
-          <span className="px-3 py-1 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full font-medium">
-            {parameters.topP < 0.5 ? 'Conservative' : parameters.topP < 0.9 ? 'Balanced' : 'Diverse'}
-          </span>
-        </div>
-        <input
-          type="range"
-          min="0.1"
-          max="1"
-          step="0.1"
-          value={parameters.topP}
-          onChange={(e) => handleParameterChange('topP', parseFloat(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
-        />
-        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span className="font-medium">0.1</span>
-          <span className="font-medium">1.0</span>
-        </div>
-      </div>
-
-      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-            Frequency Penalty: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.frequencyPenalty}</span>
-          </label>
-          <span className="px-3 py-1 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full font-medium">
-            {parameters.frequencyPenalty < 0.1 ? 'None' : parameters.frequencyPenalty < 0.5 ? 'Low' : 'High'}
-          </span>
-        </div>
-        <input
-          type="range"
-          min="-2"
-          max="2"
-          step="0.1"
-          value={parameters.frequencyPenalty}
-          onChange={(e) => handleParameterChange('frequencyPenalty', parseFloat(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
-        />
-        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span className="font-medium">-2 (Encourage)</span>
-          <span className="font-medium">2 (Discourage)</span>
-        </div>
-      </div>
-
-      <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-            Presence Penalty: <span className="text-blue-600 dark:text-blue-400 font-mono">{parameters.presencePenalty}</span>
-          </label>
-          <span className="px-3 py-1 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full font-medium">
-            {parameters.presencePenalty < 0.1 ? 'None' : parameters.presencePenalty < 0.5 ? 'Low' : 'High'}
-          </span>
-        </div>
-        <input
-          type="range"
-          min="-2"
-          max="2"
-          step="0.1"
-          value={parameters.presencePenalty}
-          onChange={(e) => handleParameterChange('presencePenalty', parseFloat(e.target.value))}
-          className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
-        />
-        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span className="font-medium">-2 (Encourage)</span>
-          <span className="font-medium">2 (Discourage)</span>
-        </div>
-      </div>
-
-      <div className="p-5 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
-        <h4 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-3 flex items-center">
-          <svg className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          Current Settings
-        </h4>
-        <div className="grid grid-cols-2 gap-3 text-xs text-blue-700 dark:text-blue-300">
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-            <span>Temperature: {parameters.temperature}</span>
+      <div className="space-y-6">
+        <div className="bg-gray-900 border border-gray-600 rounded-lg p-4">
+          <div className="flex flex-col gap-2 mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-300">Temperature</span>
+              <span className="px-3 py-1 text-xs bg-blue-900/30 text-blue-300 rounded-full font-medium">
+                {parameters.temperature}
+              </span>
+            </div>
+            <div className="text-xs text-gray-400 mb-3">
+              Controls randomness: Lower values are more deterministic, higher values more creative.
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="2"
+              step="0.1"
+              value={parameters.temperature}
+              onChange={(e) => handleParameterChange('temperature', parseFloat(e.target.value))}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-gray-400">
+              <span>Focused</span>
+              <span>Creative</span>
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span>Max Tokens: {parameters.maxTokens.toLocaleString()}</span>
+        </div>
+
+        <div className="bg-gray-900 border border-gray-600 rounded-lg p-4">
+          <div className="flex flex-col gap-2 mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-300">Max Tokens</span>
+              <span className="px-3 py-1 text-xs bg-green-900/30 text-green-300 rounded-full font-medium">
+                {parameters.maxTokens}
+              </span>
+            </div>
+            <div className="text-xs text-gray-400 mb-3">
+              Maximum number of tokens in the response. Higher values allow longer responses.
+            </div>
+            <input
+              type="range"
+              min="100"
+              max={selectedModel.maxTokens}
+              step="100"
+              value={parameters.maxTokens}
+              onChange={(e) => handleParameterChange('maxTokens', parseInt(e.target.value))}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-gray-400">
+              <span>100</span>
+              <span>{selectedModel.maxTokens.toLocaleString()}</span>
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-            <span>Top P: {parameters.topP}</span>
+        </div>
+
+        <div className="bg-gray-900 border border-gray-600 rounded-lg p-4">
+          <div className="flex flex-col gap-2 mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-300">Top P</span>
+              <span className="px-3 py-1 text-xs bg-purple-900/30 text-purple-300 rounded-full font-medium">
+                {parameters.topP}
+              </span>
+            </div>
+            <div className="text-xs text-gray-400 mb-3">
+              Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered.
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={parameters.topP}
+              onChange={(e) => handleParameterChange('topP', parseFloat(e.target.value))}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-gray-400">
+              <span>Conservative</span>
+              <span>Diverse</span>
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-            <span>Freq Penalty: {parameters.frequencyPenalty}</span>
+        </div>
+
+        <div className="bg-gray-900 border border-gray-600 rounded-lg p-4">
+          <div className="flex flex-col gap-2 mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-300">Frequency Penalty</span>
+              <span className="px-3 py-1 text-xs bg-orange-900/30 text-orange-300 rounded-full font-medium">
+                {parameters.frequencyPenalty}
+              </span>
+            </div>
+            <div className="text-xs text-gray-400 mb-3">
+              Reduces repetition of the same information. Higher values make the model less likely to repeat.
+            </div>
+            <input
+              type="range"
+              min="-2"
+              max="2"
+              step="0.1"
+              value={parameters.frequencyPenalty}
+              onChange={(e) => handleParameterChange('frequencyPenalty', parseFloat(e.target.value))}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-gray-400">
+              <span>More Repetitive</span>
+              <span>Less Repetitive</span>
+            </div>
           </div>
-          <div className="flex items-center space-x-2 col-span-2">
-            <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-            <span>Presence Penalty: {parameters.presencePenalty}</span>
+        </div>
+
+        <div className="bg-gray-900 border border-gray-600 rounded-lg p-4">
+          <div className="flex flex-col gap-2 mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-300">Presence Penalty</span>
+              <span className="px-3 py-1 text-xs bg-orange-900/30 text-orange-300 rounded-full font-medium">
+                {parameters.presencePenalty}
+              </span>
+            </div>
+            <div className="text-xs text-gray-400 mb-3">
+              Encourages the model to talk about new topics. Higher values make the model more likely to introduce new subjects.
+            </div>
+            <input
+              type="range"
+              min="-2"
+              max="2"
+              step="0.1"
+              value={parameters.presencePenalty}
+              onChange={(e) => handleParameterChange('presencePenalty', parseFloat(e.target.value))}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-gray-400">
+              <span>Stay on Topic</span>
+              <span>Explore New Topics</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <button
+            onClick={resetToDefaults}
+            className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 rounded-lg transition-all duration-200 font-medium text-sm flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Reset to Defaults
+          </button>
+        </div>
+
+        <div className="bg-gray-900 rounded-lg p-4 border border-gray-600">
+          <h4 className="font-medium text-white mb-2">Current Settings</h4>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="text-gray-400">Temperature: <span className="font-medium text-white">{parameters.temperature}</span></div>
+            <div className="text-gray-400">Max Tokens: <span className="font-medium text-white">{parameters.maxTokens}</span></div>
+            <div className="text-gray-400">Top P: <span className="font-medium text-white">{parameters.topP}</span></div>
+            <div className="text-gray-400">Freq Penalty: <span className="font-medium text-white">{parameters.frequencyPenalty}</span></div>
+            <div className="text-gray-400">Presence Penalty: <span className="font-medium text-white">{parameters.presencePenalty}</span></div>
           </div>
         </div>
       </div>

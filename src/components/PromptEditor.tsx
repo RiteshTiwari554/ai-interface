@@ -1,19 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession } from '@/contexts/SessionContext';
+import { useSession, PromptTemplate } from '@/contexts/SessionContext';
 
 export default function PromptEditor() {
   const { templates, selectedTemplate, setSelectedTemplate } = useSession();
   const [promptText, setPromptText] = useState('');
-  const [isTemplateOpen, setIsTemplateOpen] = useState(false);
   const [customPromptName, setCustomPromptName] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
 
-  const handleTemplateSelect = (template: any) => {
+  const handleTemplateSelect = (template: PromptTemplate) => {
     setSelectedTemplate(template);
     setPromptText(template.content);
-    setIsTemplateOpen(false);
   };
 
   const handleSavePrompt = () => {

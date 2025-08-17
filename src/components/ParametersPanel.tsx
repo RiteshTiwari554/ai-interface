@@ -45,7 +45,7 @@ export default function ParametersPanel() {
     <div className="flex flex-col gap-4">
       <div className="text-lg font-semibold text-white">Model Parameters</div>
       <div className="text-sm text-gray-400 mb-6">
-        Fine-tune the AI model's behavior with these parameters.
+        Fine-tune the AI model&apos;s behavior with these parameters.
       </div>
 
       <div className="space-y-6">

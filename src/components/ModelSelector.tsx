@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useSession } from '@/contexts/SessionContext';
+import { useSession, AIModel } from '@/contexts/SessionContext';
 
 export default function ModelSelector() {
   const { models, selectedModel, setSelectedModel } = useSession();
@@ -19,7 +19,7 @@ export default function ModelSelector() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSelect = (model: any) => {
+  const handleSelect = (model: AIModel) => {
     setSelectedModel(model);
     setIsOpen(false);
   };
